@@ -1,0 +1,13 @@
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <aside [style.display]="(isMenuOpen || isSizeLarge) ? 'block' : 'none'" id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+            <app-side-nav [isMenuOpen]="isMenuOpen" (toggleMenu)="toggleMenu($event)"></app-side-nav>
+        </aside>
+        <div class="layout-page">
+            <app-header [isMenuOpen]="isMenuOpen" (toggleMenu)="toggleMenu($event)"></app-header>
+            <div class="content-wrapper">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>
