@@ -1,0 +1,154 @@
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Account</h4>
+
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+          <li class="nav-item">
+            <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages-account-settings-notifications.html"
+            ><i class="bx bx-bell me-1"></i> Notifications</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="pages-account-settings-connections.html"
+            ><i class="bx bx-link-alt me-1"></i> Connections</a
+            >
+          </li>
+        </ul>
+        <div class="card mb-4">
+          <h5 class="card-header">Profile Details</h5>
+          <div class="card-body">
+            <div class="d-flex align-items-start align-items-sm-center gap-4">
+              <p-avatar [style]="{'height': '100px', 'width': '100px'}"
+                        [image]="image.url ? image.url : user.image?.imageBytes && ('data:image/png;base64,' + user.image.imageBytes)"
+                        shape="square">
+                <span class="text-base" style="font-size: 50px"
+                      *ngIf="!image.url && !user.image?.imageBytes">{{user.firstName.charAt(0).toUpperCase() + user.lastName.charAt(0).toUpperCase()}}</span>
+              </p-avatar>
+              <div class="button-wrapper">
+                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                  <span class="d-none d-sm-block">Upload new photo</span>
+                  <i class="bx bx-upload d-block d-sm-none"></i>
+                  <input
+                    type="file"
+                    id="upload"
+                    class="account-file-input"
+                    hidden
+                    accept="image/png, image/jpeg"
+                    (change)="onFileSelected($event)"
+                  />
+                </label>
+                <p class="text-muted mb-0">Allowed JPG or PNG</p>
+              </div>
+            </div>
+          </div>
+          <hr class="my-0"/>
+          <div class="card-body">
+            <form id="formAccountSettings" #userForm="ngForm" (ngSubmit)="updateUser()">
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input pInputText name="firstName" required
+                         #firstName="ngModel" class="w-100"
+                         [(ngModel)]="user.firstName"
+                         [ngClass]="{'ng-invalid ng-dirty': firstName.invalid && firstName.touched}"
+                         id="firstName"
+                         aria-describedby="firstName-help" placeholder="First name">
+                  <div *ngIf="firstName.errors && firstName.touched">
+                    <small id="firstName-help" class="text-danger"
+                           *ngIf="firstName.errors['required']">first name is required</small>
+                  </div>
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input pInputText name="lastName" required
+                         #lastName="ngModel" class="w-100"
+                         [(ngModel)]="user.lastName"
+                         [ngClass]="{'ng-invalid ng-dirty': lastName.invalid && lastName.touched}"
+                         type="text" id="lastName"
+                         aria-describedby="lastName-help"
+                         placeholder="Last name">
+                  <div *ngIf="lastName.errors && lastName.touched">
+                    <small id="lastName-help" class="text-danger"
+                           *ngIf="lastName.errors['required']">last name is required</small>
+                  </div>
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="email" class="form-label">E-mail</label>
+                  <input pInputText name="email" required class="w-100"
+                         #email="ngModel"
+                         [(ngModel)]="user.email"
+                         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                         [ngClass]="{'ng-invalid ng-dirty': ((email.invalid && email.touched) || emailExist)}"
+                         (change)="verifyEmail(email.value)"
+                         type="email" id="email"
+                         aria-describedby="email-help" placeholder="E-mail">
+                  <div *ngIf="email.errors && email.touched">
+                    <small class="text-danger" *ngIf="email.errors['required']">email is
+                      required</small>
+                    <small class="text-danger" *ngIf="email.errors['pattern']">invalid
+                      email</small>
+                  </div>
+                  <div *ngIf="emailExist && email.value.length">
+                    <small class="text-danger">email already exists</small>
+                  </div>
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="phoneNumber" class="form-label">Phone number</label>
+                  <p-inputMask mask="(999) 99-999-999" name="tel" styleClass="w-100"
+                               #tel="ngModel"
+                               [(ngModel)]="user.tel"
+                               [ngClass]="{'ng-invalid ng-dirty': tel.invalid && tel.touched}"
+                               [required]="true"
+                               id="phoneNumber" aria-describedby="phoneNumber-help"
+                               placeholder="Phone number"></p-inputMask>
+                  <div *ngIf="tel.errors && tel.touched">
+                    <small class="text-danger" *ngIf="tel.errors['required'] && user.role !== 'ADMIN'">Phone number is
+                      required</small>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-2">
+                <button type="submit" [disabled]="userForm.invalid" class="btn btn-primary me-2">Save changes</button>
+              </div>
+            </form>
+          </div>
+
+
+        </div>
+<!--
+        <div class="card">
+          <h5 class="card-header">Delete Account</h5>
+          <div class="card-body">
+            <div class="mb-3 col-12 mb-0">
+              <div class="alert alert-warning">
+                <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your account?</h6>
+                <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
+              </div>
+            </div>
+            <form id="formAccountDeactivation">
+              <div class="form-check mb-3">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="accountActivation"
+                  id="accountActivation"
+                />
+                <label class="form-check-label" for="accountActivation"
+                >I confirm my account deactivation</label
+                >
+              </div>
+              <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
+            </form>
+          </div>
+        </div>
+-->
+      </div>
+    </div>
+  </div>
+  <p-toast></p-toast>
+</div>

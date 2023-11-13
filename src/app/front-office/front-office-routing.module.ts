@@ -12,7 +12,7 @@ const routes: Routes = [
     {
         path: '', component: FrontOfficeComponent,
         children: [
-            {path: "", component: HomeComponent},
+            {path: '', component: HomeComponent},
             {path: 'login', component: LoginComponent},
             {path: 'signup', component: SignUpComponent},
             {path: 'about', component: AboutUsComponent},

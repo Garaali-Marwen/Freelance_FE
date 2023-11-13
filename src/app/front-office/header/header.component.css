@@ -1,0 +1,9 @@
+::ng-deep .mat-mdc-menu-panel {
+  background-color: #ffffff!important;
+}
+::ng-deep .mat-mdc-menu-item{
+  color: #5f6670 !important;
+}
+::ng-deep .mat-mdc-menu-item:hover{
+  background-color: rgba(95, 102, 112, 0.07) !important;
+}

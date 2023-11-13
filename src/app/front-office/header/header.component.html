@@ -14,7 +14,8 @@
 
       <nav class="mx-auto site-navigation">
         <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-          <li><a routerLink="" class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+          <li><a routerLink="" class="nav-link" routerLinkActive="active"
+                 [routerLinkActiveOptions]="{exact: true}">Home</a></li>
           <li><a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">About</a></li>
           <li>
             <a routerLink="/joblist" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Job List</a>
@@ -33,18 +34,59 @@
             </ul>
           </li>
           <li><a href="#">Blog</a></li>
-          <li><a routerLink="/contact" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Contact</a></li>
-          <li class="d-lg-none"><a routerLink="/signup" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Sign Up</a></li>
-          <li class="d-lg-none"><a routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Log In</a></li>
+          <li><a routerLink="/contact" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Contact</a>
+          </li>
+          <li class="d-lg-none"><a routerLink="/signup" routerLinkActive="active"
+                                   [routerLinkActiveOptions]="{exact: true}">Sign Up</a></li>
+          <li class="d-lg-none"><a routerLink="/login" routerLinkActive="active"
+                                   [routerLinkActiveOptions]="{exact: true}">Log In</a></li>
         </ul>
       </nav>
 
       <div class="right-cta-menu text-right d-flex align-items-center col-6">
-        <div class="ml-auto">
+        <div class="ml-auto" *ngIf="!userConnected">
           <a routerLink="signup" class="btn btn-outline-white border-width-2 d-none d-lg-inline-block mr-2"><span
             class="mr-2 icon-add"></span>Sign Up</a>
           <a routerLink="/login" class="btn btn-primary border-width-2 d-none d-lg-inline-block"><span
-            class="mr-2 icon-lock_outline"></span>Log In</a>
+            class="mr-2 pi pi-sign-in"></span>Log In</a>
+        </div>
+        <div class="ml-auto" *ngIf="userConnected">
+          <p-avatar [style]="{'cursor': 'pointer'}"
+                    [image]="user.image?.imageBytes && ('data:image/png;base64,' + user.image.imageBytes)"
+                    [label]="!user.image?.imageBytes ? (user.firstName.charAt(0).toUpperCase() + user.lastName.charAt(0).toUpperCase()) : ''"
+                    styleClass="mr-2"
+                    size="large" shape="circle"
+                    [matMenuTriggerFor]="menu"></p-avatar>
+          <mat-menu class="customize" #menu="matMenu">
+            <div class="pr-4 pl-4 pt-2">
+              <div class="d-flex">
+                <div class="flex-shrink-0 me-3">
+                  <div class="avatar avatar-online">
+                    <p-avatar [style]="{'cursor': 'pointer'}"
+                              [image]="user.image?.imageBytes && ('data:image/png;base64,' + user.image.imageBytes)"
+                              [label]="!user.image?.imageBytes ? (user.firstName.charAt(0).toUpperCase() + user.lastName.charAt(0).toUpperCase()) : ''"
+                              styleClass="mr-2"
+                              size="large" shape="circle"></p-avatar>
+                  </div>
+                </div>
+                <div class="flex-grow-1">
+                  <span class="fw-semibold d-block">{{user.firstName | titlecase}} {{user.lastName | titlecase}}</span>
+                  <small class="text-muted">{{user.role | titlecase}}</small>
+                </div>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button routerLink="/backOffice/account-settings" mat-menu-item>
+              <i class="mr-3 font-weight-bold pi pi-user"></i>
+              <span>My account</span>
+            </button>
+
+            <div class="dropdown-divider"></div>
+            <button (click)="logOut()" mat-menu-item>
+              <i class="mr-3 font-weight-bold pi pi-sign-out"></i>
+              <span>Log out</span>
+            </button>
+          </mat-menu>
         </div>
         <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3"><span
           class="icon-menu h3 m-0 p-0 mt-2"></span></a>
