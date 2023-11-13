@@ -1,54 +1,181 @@
-<section class="section-hero overlay inner-page bg-image" style="background-image: url('assets/images/hero_1.jpg');" id="home-section">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-7">
-        <h1 class="text-white font-weight-bold">Sign Up</h1>
-        <div class="custom-breadcrumbs">
-          <a href="#">Home</a> <span class="mx-2 slash">/</span>
-          <span class="text-white"><strong>Sign Up</strong></span>
+<section class="section-hero overlay inner-page bg-image" style="background-image: url('assets/images/hero_1.jpg');"
+         id="home-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-white font-weight-bold">Sign Up</h1>
+                <div class="custom-breadcrumbs">
+                    <a href="#">Home</a> <span class="mx-2 slash">/</span>
+                    <span class="text-white"><strong>Sign Up</strong></span>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
 
 <section class="site-section">
-  <div class="container">
-    <div class="row">
-      <div class="m-auto p-4 border rounded w-50">
-        <h2 class="mb-4">Sign Up To JobBoard</h2>
-        <form action="#">
+    <div class="container">
+        <div class="row">
+            <div class="formCard">
+                <div [ngClass]="toggleProperty ? 'flipped' : ''" class="card">
+                    <div class="front">
+                        <h2 style="font-size: 30px">Join as a client or freelancer</h2>
+                        <div class="d-flex justify-content-around w-100 p-5"  style="gap: 20px">
+                            <div pRipple class="styled-box-green border rounded text-center p-3 w-100" style="cursor: pointer"
+                                 (click)="toggle(true)">
+                                <p-image src="assets/images/freelancer.png"
+                                         alt="Image" width="100"></p-image>
+                                <h2 class="mt-4">I’m a client, hiring for a project</h2>
+                            </div>
 
-          <div class="row form-group">
-            <div class="col-md-12 mb-3 mb-md-0">
-              <label class="text-black" for="eml">Email</label>
-              <input type="text" id="eml" class="form-control" placeholder="Email address">
-            </div>
-          </div>
-          <div class="row form-group">
-            <div class="col-md-12 mb-3 mb-md-0">
-              <label class="text-black" for="pass">Password</label>
-              <input type="password" id="pass" class="form-control" placeholder="Password">
-            </div>
-          </div>
-          <div class="row form-group mb-4">
-            <div class="col-md-12 mb-3 mb-md-0">
-              <label class="text-black" for="repassword">Re-Type Password</label>
-              <input type="password" id="repassword" class="form-control" placeholder="Re-type Password">
-            </div>
-          </div>
+                            <div pRipple class="styled-box-green border rounded text-center p-3 w-100" style="cursor: pointer"
+                                 (click)="toggle(false)">
+                                <p-image src="assets/images/recruiter.png"
+                                         alt="Image" width="100"></p-image>
+                                <h2 class="mt-4">I’m a freelancer, looking for work</h2>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <p>Already have an account? <a routerLink="/login">Log In</a></p>
+                        </div>
+                    </div>
+                    <div class="back">
+                        <div class="arrow-icon" (click)="toggle(false)">
+                            <span class="icon-close2"></span>
+                        </div>
+                        <h2 class="mb-4" *ngIf="clientSignUp">Sign up to hire talent</h2>
+                        <h2 class="mb-4" *ngIf="!clientSignUp">Sign up to find work you love</h2>
+                        <form #signUpForm="ngForm" (ngSubmit)="signUp(signUpForm.value)" class="d-flex flex-column align-items-center">
+                            <div class="row form-group w-100">
+                                <div class="col-md-12 mb-3 mb-md-0 d-flex justify-content-around p-0" style="gap: 20px">
+                                    <div class="d-flex flex-column w-100">
+                                        <label htmlFor="firstName">First name *</label>
+                                        <input pInputText ngModel name="firstName" required
+                                               #firstName="ngModel"
+                                               [ngClass]="{'ng-invalid ng-dirty': firstName.invalid && firstName.touched}"
+                                               id="firstName"
+                                               aria-describedby="firstName-help" placeholder="First name">
+                                        <div *ngIf="firstName.errors && firstName.touched">
+                                            <small id="firstName-help" class="text-danger"
+                                                   *ngIf="firstName.errors['required']">first name is required</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column w-100">
+                                        <label htmlFor="lastName">Last name *</label>
+                                        <input pInputText ngModel name="lastName" required
+                                               #lastName="ngModel"
+                                               [ngClass]="{'ng-invalid ng-dirty': lastName.invalid && lastName.touched}"
+                                               type="text" id="lastName"
+                                               aria-describedby="lastName-help"
+                                               placeholder="Last name">
+                                        <div *ngIf="lastName.errors && lastName.touched">
+                                            <small id="lastName-help" class="text-danger"
+                                                   *ngIf="lastName.errors['required']">last name is required</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-          <div class="row form-group">
-            <div class="col-md-12">
-              <input type="submit" value="Sign Up" class="btn px-4 btn-primary text-white">
-            </div>
-          </div>
-        </form>
+                            <div class="row form-group w-100">
+                                <div class="col-md-12 mb-3 mb-md-0 d-flex justify-content-around p-0" style="gap: 20px">
+                                    <div class="d-flex flex-column w-100">
+                                        <label htmlFor="email">E-mail *</label>
+                                        <input pInputText ngModel name="email" required class="w-100"
+                                               #email="ngModel"
+                                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                                               [ngClass]="{'ng-invalid ng-dirty': ((email.invalid && email.touched) || emailExist)}"
+                                               (change)="verifyEmail(email.value)"
+                                               type="email" id="email"
+                                               aria-describedby="email-help" placeholder="E-mail">
+                                        <div *ngIf="email.errors && email.touched">
+                                            <small class="text-danger" *ngIf="email.errors['required']">email is
+                                                required</small>
+                                            <small class="text-danger" *ngIf="email.errors['pattern']">invalid
+                                                email</small>
+                                        </div>
+                                        <div *ngIf="emailExist && email.value.length">
+                                            <small class="text-danger">email already exists</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column w-100">
+                                        <label htmlFor="phoneNumber">Phone number *</label>
+                                        <p-inputMask mask="(999) 99-999-999" ngModel name="tel" styleClass="w-100"
+                                                     #tel="ngModel"
+                                                     [ngClass]="{'ng-invalid ng-dirty': tel.invalid && tel.touched}"
+                                                     [required]="true"
+                                                     id="phoneNumber" aria-describedby="phoneNumber-help"
+                                                     placeholder="Phone number"></p-inputMask>
+                                        <div *ngIf="tel.errors && tel.touched">
+                                            <small class="text-danger" *ngIf="tel.errors['required']">Phone number is
+                                                required</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-        <div class="text-center">
-          <p>Not a member? <a routerLink="/login">Sign In</a></p>
+                            <div class="row form-group w-100">
+                                <div class="col-md-12 mb-3 mb-md-0 d-flex justify-content-around" style="gap: 20px">
+                                    <div class="d-flex flex-column w-100">
+                                        <label htmlFor="password">Password *</label>
+                                        <p-password [toggleMask]="true"
+                                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$" ngModel
+                                                    name="password" #password="ngModel"
+                                                    [ngClass]="{'ng-invalid ng-dirty': password.invalid && password.touched}"
+                                                    required placeholder="Password">
+                                            <ng-template pTemplate="header">
+                                                <h6>Pick a password</h6>
+                                            </ng-template>
+                                            <ng-template pTemplate="footer">
+                                                <p-divider></p-divider>
+                                                <p class="mt-2">Suggestions</p>
+                                                <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                                                    <li>At least one lowercase</li>
+                                                    <li>At least one uppercase</li>
+                                                    <li>At least one numeric</li>
+                                                    <li>Minimum 8 characters</li>
+                                                </ul>
+                                            </ng-template>
+                                        </p-password>
+                                        <div *ngIf="password.errors && password.touched">
+                                            <small class="text-danger" *ngIf="password.errors['required']">Password is
+                                                required</small>
+                                            <small class="text-danger" *ngIf="password.errors['pattern']">Invalid password</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column w-100">
+                                        <label htmlFor="passwordRepeat">Repeat your password *</label>
+                                        <p-password [toggleMask]="true"
+                                                    ngModel
+                                                    name="passwordRepeat"
+                                                    #passwordRepeat="ngModel"
+                                                    [ngClass]="{'ng-invalid ng-dirty': passwordRepeat.invalid && passwordRepeat.touched}"
+                                                    required [pattern]="password.value"
+                                                    placeholder="Repeat your password">
+                                            >
+                                        </p-password>
+                                        <div *ngIf="passwordRepeat.errors && passwordRepeat.touched">
+                                            <small class="text-danger" *ngIf="passwordRepeat.errors['required']">Repeat
+                                                password is
+                                                required</small>
+                                            <small class="text-danger" *ngIf="passwordRepeat.errors['pattern']">Passwords
+                                                must match</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group mt-5">
+                                <div class="col-md-12 m-auto">
+                                    <button type="submit" [disabled]="signUpForm.invalid || emailExist"
+                                            class="btn px-4 btn-primary text-white">Create my account</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <p-toast></p-toast>
         </div>
-      </div>
     </div>
-  </div>
 </section>
